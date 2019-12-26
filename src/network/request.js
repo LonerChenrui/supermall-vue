@@ -5,7 +5,7 @@ import qs from 'qs';
 
 Vue.use(Toast)
 
-const url = "http://106.54.54.237:8000/api/v1" || "http://123.207.32.32:8000/api/v2";
+const url = "http://106.54.54.237:8000/api/w1" || "http://123.207.32.32:8000/api/w2";
 
 // 封装axios并导出
 export function request(config) {

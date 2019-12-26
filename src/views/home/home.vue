@@ -9,33 +9,51 @@
       </template>
     </nav-bar>
 
-    <!-- 轮播图 -->
-    <loner-swiper 
-      :banner="banner"
+    <!-- better-scroll -->
+    <scroll 
+      class="scroll_content"
+      ref="scroll_component"
+      :pullUpLoad="true"
+      @pullingUp="pullingUp"
+      :probeType="3"
+      @scrollOption="scrollOption"
+    >
+      <!-- 轮播图 -->
+      <loner-swiper 
+        :banner="banner"
+      />
+
+      <!-- 推荐 -->
+      <loner-recommend :recommend="recommend"/>
+
+      <!-- 本周流行 -->
+      <loner-feature-view/>
+
+      <!-- tabControl -->
+      <tab-control 
+        :tabControlTitles="tabControlTitles"
+        @goodsListtype="goodsListtype"
+      />
+
+      <!-- 商品展示 -->
+      <goods-list :goodList="currentGoodsData"/>
+    </scroll>
+
+    <!-- 回到顶部 -->
+    <back-top 
+      v-show="isBackTop"
+      @click.native="backTopPotion"
     />
-
-    <!-- 推荐 -->
-    <loner-recommend :recommend="recommend"/>
-
-    <!-- 本周流行 -->
-    <loner-feature-view/>
-
-    <!-- tabControl -->
-    <tab-control 
-      :tabControlTitles="tabControlTitles"
-      @goodsListtype="goodsListtype"
-    />
-
-    <!-- 商品展示 -->
-    <goods-list :goodList="currentGoodsData"/>
-
+    
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/common/navBar/NavBar'
+import Scroll from '@/components/common/scroll/Scroll'
 import TabControl from '@/components/content/tabControl/TabControl'
 import GoodsList from '@/components/content/goods/GoodsList'
+import BackTop from '@/components/content/backTop/BackTop'
 
 
 import LonerSwiper from '@/views/home/child/Swiper'
@@ -55,13 +73,16 @@ export default {
         new: {page: 0,list: []},
         sell: {page: 0,list: []},
       },
-      currentType: 'pop'
+      currentType: 'pop',
+      isBackTop: false
     }
   },
   components:{
     NavBar,
     TabControl,
     GoodsList,
+    Scroll,
+    BackTop,
     LonerSwiper,
     LonerRecommend,
     LonerFeatureView
@@ -92,7 +113,8 @@ export default {
         this.goodsList[type].page = res.data.page
         this.goodsList[type].list.push(...res.data.list)
         this.goodsList[type].page+= 1
-        console.log(res)
+        // 调用finishPullUp方法可以一直上拉加载更多
+        this.$refs.scroll_component.finishPullUp()
       })
     },
     goodsListtype(index) {
@@ -107,7 +129,17 @@ export default {
          this.currentType = 'sell'
          break  
       }
+    },
+    pullingUp() {
+      this.getGoodsData(this.currentType)
+    },
+    scrollOption(option) {
+      this.isBackTop = (-option.y) > 1000
+    },
+    backTopPotion() {
+      this.$refs.scroll_component.backTopPotion(0,0,800)
     }
+
   },
   computed: {
     currentGoodsData() {
@@ -118,10 +150,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+#home {
+  position: relative;
+  height: 100%;
+}
 .home_navBar {
   width: 100%;
   background: #ff8198;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 9;
@@ -133,4 +169,12 @@ export default {
    color: #fff;
 }
 
+.scroll_content {
+  position: absolute;
+  top: 44px;
+  bottom: 49px;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+}
 </style>
