@@ -49,6 +49,7 @@
 </template>
 
 <script>
+
 import NavBar from '@/components/common/navBar/NavBar'
 import Scroll from '@/components/common/scroll/Scroll'
 import TabControl from '@/components/content/tabControl/TabControl'
@@ -61,6 +62,8 @@ import LonerRecommend from '@/views/home/child/Recommend'
 import LonerFeatureView from '@/views/home/child/FeatureView'
 
 import { getHomeMultiData,getGoodsData } from '@/network/home'
+import { debounce } from '@/common/utils'
+
 export default {
   name: "home",
   data() {
@@ -91,10 +94,17 @@ export default {
 
   },
   created() {
-    this.getHomeMultiData()
     this.getGoodsData('pop')
     this.getGoodsData('new')
     this.getGoodsData('sell')
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll_component.refresh,1000)
+    // 监听事件总线
+    this.$bus.$on('loadimg',(prams) => {
+     refresh()
+    })
+    
   },
   methods: {
     // 获取多类数据
@@ -138,8 +148,7 @@ export default {
     },
     backTopPotion() {
       this.$refs.scroll_component.backTopPotion(0,0,800)
-    }
-
+    },
   },
   computed: {
     currentGoodsData() {

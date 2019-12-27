@@ -2,7 +2,7 @@
   <div class="goodsList">
     <div class="googsListItem" v-for="(item, index) in goodList" :key="index">
       <div>
-        <img :src="item.show.img" alt="">
+        <img :src="item.show.img" alt="" @load="refresh()">
       </div>
       <p class="title">{{item.title}}</p>
       <div class="googsListItem_bottom">
@@ -30,6 +30,12 @@ export default {
       default() {
         return []
       }
+    }
+  },
+  methods: {
+    refresh() {
+      // 发射事件总线
+      this.$bus.$emit('loadimg')
     }
   },
 }

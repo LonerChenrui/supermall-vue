@@ -40,6 +40,7 @@ export default {
 
     // 监听scroll滚动到底部
     this.pullUpLoad && this.scroll.on('pullingUp',() => {
+      console.log('滚动到底部了')
       this.$emit('pullingUp') 
     })
 
@@ -59,6 +60,11 @@ export default {
     // scrollTo回到指定滚动位置  x横坐标, y纵坐标, time回到指定位置的时间
     backTopPotion(x, y, time=500) {
       this.scroll && this.scroll.scrollTo(x,y,time)
+    },
+    // 用于重新计算scroll滚动区域高度
+    refresh() {
+      console.log(11111111111)
+      // this.scroll && this.scroll.refresh()
     }
   },
   
