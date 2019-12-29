@@ -9,6 +9,15 @@
       </template>
     </nav-bar>
 
+    <!-- tabControl用于吸顶 -->
+    <tab-control 
+      :tabControlTitles="tabControlTitles"
+      @goodsListtype="goodsListtype"
+      ref="tabControl_Cpn1"
+      class="tabControlCpn"
+      v-show="isTabControl"
+    />
+
     <!-- better-scroll -->
     <scroll 
       class="scroll_content"
@@ -21,6 +30,7 @@
       <!-- 轮播图 -->
       <loner-swiper 
         :banner="banner"
+        @swiperImg="swiperImg"
       />
 
       <!-- 推荐 -->
@@ -33,6 +43,8 @@
       <tab-control 
         :tabControlTitles="tabControlTitles"
         @goodsListtype="goodsListtype"
+        ref="tabControl_Cpn2"
+        class="tabControlCpn"
       />
 
       <!-- 商品展示 -->
@@ -77,7 +89,10 @@ export default {
         sell: {page: 0,list: []},
       },
       currentType: 'pop',
-      isBackTop: false
+      isBackTop: false,
+      isTabControl: false,
+      TabControloffsetTop: 0,
+      scrollY: 0
     }
   },
   components:{
@@ -94,6 +109,7 @@ export default {
 
   },
   created() {
+    this.getHomeMultiData()
     this.getGoodsData('pop')
     this.getGoodsData('new')
     this.getGoodsData('sell')
@@ -103,7 +119,7 @@ export default {
     // 监听事件总线
     this.$bus.$on('loadimg',(prams) => {
      refresh()
-    })
+    }) 
     
   },
   methods: {
@@ -139,16 +155,34 @@ export default {
          this.currentType = 'sell'
          break  
       }
+      this.$refs.tabControl_Cpn1.curIndex = index;
+      this.$refs.tabControl_Cpn2.curIndex = index;
+      this.$refs.scroll_component.refresh();
     },
     pullingUp() {
       this.getGoodsData(this.currentType)
     },
     scrollOption(option) {
-      this.isBackTop = (-option.y) > 1000
+      this.isBackTop = (-option.y) > 1000;
+      this.isTabControl = (-option.y) > this.TabControloffsetTop
     },
     backTopPotion() {
       this.$refs.scroll_component.backTopPotion(0,0,800)
     },
+    swiperImg() {
+      this.TabControloffsetTop = this.$refs.tabControl_Cpn2.$el.offsetTop
+    },
+  },
+  // 组件进入被调用
+  activated() {
+    console.log("组件进来了")
+    this.$refs.scroll_component.backTopPotion(0,this.scrollY ,0)
+
+  },
+  // 组件离开被调用
+  deactivated() {
+    this.scrollY = this.$refs.scroll_component.scrollY()
+    console.log(this.scrollY)
   },
   computed: {
     currentGoodsData() {
@@ -166,10 +200,10 @@ export default {
 .home_navBar {
   width: 100%;
   background: #ff8198;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // z-index: 9;
 
 }
 .home_navBar_title {
@@ -185,5 +219,9 @@ export default {
   right: 0;
   left: 0;
   overflow: hidden;
+}
+.tabControlCpn {
+  position: relative;
+  z-index: 9;
 }
 </style>

@@ -40,7 +40,6 @@ export default {
 
     // 监听scroll滚动到底部
     this.pullUpLoad && this.scroll.on('pullingUp',() => {
-      console.log('滚动到底部了')
       this.$emit('pullingUp') 
     })
 
@@ -63,8 +62,11 @@ export default {
     },
     // 用于重新计算scroll滚动区域高度
     refresh() {
-      console.log(11111111111)
-      // this.scroll && this.scroll.refresh()
+      this.scroll && this.scroll.refresh()
+    },
+    // scroll的纵轴坐标 y
+    scrollY() {
+      return this.scroll && this.scroll.y ?  this.scroll.y : 0
     }
   },
   

@@ -3,7 +3,7 @@
     <van-swipe :autoplay="3000" indicator-color="red">
       <van-swipe-item v-for="(item) in banner" :key="(item.title)">
         <a :href="item.link">
-          <img :src="item.image" alt="">
+          <img :src="item.image" alt="" @load="swiperImg">
         </a>
       </van-swipe-item>  
     </van-swipe>
@@ -17,6 +17,7 @@ export default {
   name: "",
   data() {
     return {
+      onceLoad: true
     }
   },
   components:{ },
@@ -24,6 +25,15 @@ export default {
     banner: {
       type: Array,
       default: []
+    }
+  },
+  methods: {
+    swiperImg() {
+      if(this.onceLoad) {
+        this.$emit('swiperImg')
+        this.onceLoad = false;
+      }
+      
     }
   },
 }
