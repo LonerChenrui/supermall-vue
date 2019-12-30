@@ -1,6 +1,11 @@
 <template>
   <div class="goodsList">
-    <div class="googsListItem" v-for="(item, index) in goodList" :key="index">
+    <div 
+      class="googsListItem" 
+      v-for="(item, index) in goodList" 
+      :key="index"
+      @click="details(item.iid)"
+    >
       <div>
         <img :src="item.show.img" alt="" @load="refresh()">
       </div>
@@ -36,7 +41,21 @@ export default {
     refresh() {
       // 发射事件总线
       this.$bus.$emit('loadimg')
-    }
+    },
+    // 点击跳转详情页
+    details(iid) {
+      if(iid) {
+        this.$router.push({
+          path: '/details',
+          query: {
+            iid
+          }
+        })
+      }else {
+        this.$router.go(0)
+      }
+    }    
+
   },
 }
 </script>
