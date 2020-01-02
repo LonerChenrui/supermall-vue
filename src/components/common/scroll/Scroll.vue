@@ -62,6 +62,7 @@ export default {
     },
     // 用于重新计算scroll滚动区域高度
     refresh() {
+      console.log("refresh")
       this.scroll && this.scroll.refresh()
     },
     // scroll的纵轴坐标 y

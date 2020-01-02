@@ -1,5 +1,6 @@
 <template>
   <div class="goodsList">
+    <p v-show="isRecommend">推荐商品</p>
     <div 
       class="googsListItem" 
       v-for="(item, index) in goodList" 
@@ -7,7 +8,7 @@
       @click="details(item.iid)"
     >
       <div>
-        <img :src="item.show.img" alt="" @load="refresh()">
+        <img :src="showTypeImg(index)" alt="" @load="refresh()">
       </div>
       <p class="title">{{item.title}}</p>
       <div class="googsListItem_bottom">
@@ -35,12 +36,19 @@ export default {
       default() {
         return []
       }
+    },
+    isRecommend: {
+      type: Boolean,
+      default() {
+        return false
+      }
     }
   },
   methods: {
     refresh() {
       // 发射事件总线
-      this.$bus.$emit('loadimg')
+      this.$bus.$emit('Loadimg')
+      
     },
     // 点击跳转详情页
     details(iid) {
@@ -54,8 +62,11 @@ export default {
       }else {
         this.$router.go(0)
       }
-    }    
-
+    },
+    // 动态显示图片
+    showTypeImg(index) {
+      return  this.goodList[index].img || this.goodList[index].image || this.goodList[index].show.img;
+    } 
   },
 }
 </script>
@@ -65,6 +76,13 @@ export default {
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  p {
+    width: 100%;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+  }
   .googsListItem {
     width: 49%;
     padding: 3px;

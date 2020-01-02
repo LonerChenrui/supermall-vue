@@ -75,6 +75,7 @@ import LonerFeatureView from '@/views/home/child/FeatureView'
 
 import { getHomeMultiData,getGoodsData } from '@/network/home'
 import { debounce } from '@/common/utils'
+import { imgLoadMixin,backTopMixin } from '@/common/mixin'
 
 export default {
   name: "home",
@@ -89,10 +90,10 @@ export default {
         sell: {page: 0,list: []},
       },
       currentType: 'pop',
-      isBackTop: false,
+      // isBackTop: false,
       isTabControl: false,
       TabControloffsetTop: 0,
-      scrollY: 0
+      scrollY: 0,
     }
   },
   components:{
@@ -103,8 +104,9 @@ export default {
     BackTop,
     LonerSwiper,
     LonerRecommend,
-    LonerFeatureView
-   },
+    LonerFeatureView,
+  },
+  mixins: [ imgLoadMixin,backTopMixin ],
   props:{ 
 
   },
@@ -115,12 +117,7 @@ export default {
     this.getGoodsData('sell')
   },
   mounted() {
-    const refresh = debounce(this.$refs.scroll_component.refresh,1000)
-    // 监听事件总线
-    this.$bus.$on('loadimg',(prams) => {
-     refresh()
-    }) 
-    
+   
   },
   methods: {
     // 获取多类数据
@@ -166,9 +163,9 @@ export default {
       this.isBackTop = (-option.y) > 1000;
       this.isTabControl = (-option.y) > this.TabControloffsetTop
     },
-    backTopPotion() {
-      this.$refs.scroll_component.backTopPotion(0,0,800)
-    },
+    // backTopPotion() {
+    //   this.$refs.scroll_component.backTopPotion(0,0,800)
+    // },
     swiperImg() {
       this.TabControloffsetTop = this.$refs.tabControl_Cpn2.$el.offsetTop
     },
@@ -182,7 +179,8 @@ export default {
   // 组件离开被调用
   deactivated() {
     this.scrollY = this.$refs.scroll_component.scrollY()
-    console.log(this.scrollY)
+    // 取消home组件事件总线
+    this.$bus.$off('Loadimg',this.imgMonitor)
   },
   computed: {
     currentGoodsData() {

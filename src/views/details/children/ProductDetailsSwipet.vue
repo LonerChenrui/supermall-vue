@@ -13,7 +13,7 @@ export default {
   name: "productDetailsSwipet",
   data() {
     return {
-      onceLoad: false
+      onceLoad: true
     }
   },
   components:{ },
@@ -28,13 +28,13 @@ export default {
   methods: {
     swiperImg() {
       if(this.onceLoad) {
-        // this.$emit('swiperImg')
+        this.$emit('swiperLoadImg')
         this.onceLoad = false;
       }
     }
   },
   destroyed() {
-    console('销毁')
+    
   }
 }
 </script>

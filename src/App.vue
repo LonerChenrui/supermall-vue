@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <keep-alive exclude="productDetailsSwipet">
+    <keep-alive exclude="productDetails">
       <router-view></router-view>
     </keep-alive>
     <main-tab-bar></main-tab-bar>
@@ -13,7 +13,6 @@ export default {
   name: 'App',
   data() {
     return {
-      
     }
   },
   components: {

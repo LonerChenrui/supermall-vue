@@ -2,7 +2,7 @@
   <div class="ProductDetailsNavBar">
     <nav-bar class="">
       <template v-slot:nav-left>
-        <div class="nav_left_backImg">
+        <div class="nav_left_backImg" @click="goBack">
           <img src="~@/assets/img/common/back.svg" alt="">
         </div>
       </template>
@@ -28,6 +28,11 @@ export default {
     NavBar
   },
   props:{ },
+  methods: {
+    goBack() {
+      this.$router.back();
+    }
+  },
 }
 </script>
 <style scoped>
