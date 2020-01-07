@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     swiperImg() {
+      // this.$emit('swiperLoadImg')
       if(this.onceLoad) {
         this.$emit('swiperLoadImg')
         this.onceLoad = false;

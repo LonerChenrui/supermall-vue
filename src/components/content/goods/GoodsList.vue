@@ -47,7 +47,7 @@ export default {
   methods: {
     refresh() {
       // 发射事件总线
-      this.$bus.$emit('Loadimg')
+      this.$bus.$emit('goodsLoadimg')
       
     },
     // 点击跳转详情页

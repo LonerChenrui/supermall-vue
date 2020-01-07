@@ -14,7 +14,7 @@ export const imgLoadMixin = {
     this.imgMonitor = () => { 
       refresh()
     }
-    this.$bus.$on('Loadimg',this.imgMonitor)
+    this.$bus.$on('goodsLoadimg',this.imgMonitor)
   }
 }
 

@@ -62,12 +62,16 @@ export default {
     },
     // 用于重新计算scroll滚动区域高度
     refresh() {
-      console.log("refresh")
+      // console.log("refresh")
       this.scroll && this.scroll.refresh()
     },
     // scroll的纵轴坐标 y
     scrollY() {
       return this.scroll && this.scroll.y ?  this.scroll.y : 0
+    },
+    // scroll滚动到指定元素
+    scrollToElement(el,time=500) {
+      return this.scroll && this.scroll.scrollToElement(el,time)
     }
   },
   

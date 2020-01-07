@@ -172,7 +172,6 @@ export default {
   },
   // 组件进入被调用
   activated() {
-    console.log("组件进来了")
     this.$refs.scroll_component.backTopPotion(0,this.scrollY ,0)
 
   },

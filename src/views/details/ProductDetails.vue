@@ -1,15 +1,16 @@
 <template>
   <div class="productDetails">
-    <product-details-navBar/>
+    <product-details-navBar @navBarClick="navBarClick" ref="nav_bar"/>
     <scroll class="scroll" ref="scroll_component" :probeType="3" @scrollOption="scrollOption">
-      <product-details-swipet :topImages="topImages" @swiperLoadImg="loadImg"/>
+      <product-details-swipet :topImages="topImages" @swiperLoadImg="swiperLoadImg" class="scroll_postion"/>
       <detail-base-info :goods="goods" />
       <detail-shop-info :shop="shops"/>
-      <detail-images-info :imagesInfo="detailsInfo" @detailsImgInfo="loadImg"/>
-      <detail-param-info :paramInfo="paramsInfo"/>
-      <detail-comment-info :commentInfo="commentInfo"/>
-      <product-goods :goodList="goodList" :isRecommend="true"/>
+      <detail-images-info :imagesInfo="detailsInfo" @detailsImgInfo="detailsImgInfo"/>
+      <detail-param-info :paramInfo="paramsInfo" class="scroll_postion"/>
+      <detail-comment-info :commentInfo="commentInfo" class="scroll_postion"/>
+      <product-goods :goodList="goodList" :isRecommend="true" class="scroll_postion"/>
     </scroll>
+    <detail-bottom-bar @addToCart="addToCart"/>
     <back-top v-show="isBackTop" @click.native="backTopPotion"/>
   </div>
 </template>
@@ -23,6 +24,7 @@ import DetailImagesInfo from '@/views/details/children/DetailImagesInfo'
 import DetailParamInfo from '@/views/details/children/DetailParamInfo'
 import DetailCommentInfo from '@/views/details/children/DetailCommentInfo'
 import BackTop from '@/components/content/backTop/BackTop'
+import DetailBottomBar from "@/views/details/children/DetailBottomBar";
 
 import Scroll from '@/components/common/scroll/Scroll'
 import ProductGoods from '@/components/content/goods/GoodsList'
@@ -30,6 +32,8 @@ import ProductGoods from '@/components/content/goods/GoodsList'
 import { getProductDetail,Goods,Shop,GoodsParams,getRecommend } from '@/network/productDetails'
 import { debounce } from '@/common/utils'
 import { imgLoadMixin,backTopMixin } from '@/common/mixin'
+
+import { mapActions } from 'vuex'
 export default {
   name: "productDetails",
   data() {
@@ -42,6 +46,9 @@ export default {
       paramsInfo: {},
       commentInfo: {},
       goodList: [],
+      detailsScrollY: [],
+      _scrollY: 0,
+      navBarIndex: 0
     }
   },
   mixins: [imgLoadMixin,backTopMixin],
@@ -59,6 +66,7 @@ export default {
     DetailCommentInfo,
     ProductGoods,
     BackTop,
+    DetailBottomBar
   },
   created() {
     // 获取详情页的iid
@@ -68,11 +76,11 @@ export default {
     this.getRecommend()
   },
   mounted() {
-    
+     
   },
   destroyed() {
     // 取消details事件总线
-    this.$bus.$off('Loadimg',this.imgMonitor)
+    this.$bus.$off('goodsLoadimg',this.imgMonitor)
   },
   methods: {
     // 发送网络请求
@@ -112,12 +120,58 @@ export default {
       })
     },
     // 自定义事件
-    loadImg() {
+    swiperLoadImg() {
+      // this.imgMonitor();
+      this.$refs.scroll_component.refresh();
+    },
+    detailsImgInfo() {
+      // this.imgMonitor();
       this.$refs.scroll_component.refresh();
     },
     // scroll滚动到一定位置时back-top显示
     scrollOption(option) {
       this.isBackTop = (-option.y) > 1000;
+
+      // 元素的offSetTop
+      this.detailsScrollY = [];
+      let targerEl = Array.from(document.getElementsByClassName('scroll_postion'));
+      for(let i=0; i<targerEl.length; i++) {
+        this.detailsScrollY.push(targerEl[i].offsetTop);
+      }
+      this.detailsScrollY.push(Number.MAX_VALUE);
+
+      // 获取scroll的Y轴值
+      this._scrollY = option ? (-option.y) : 0;
+      for(let k=0; k<this.detailsScrollY.length - 1; k++) {
+        if(this.navBarIndex !== k && this._scrollY > this.detailsScrollY[k] && this._scrollY <= this.detailsScrollY[k+1]) {
+          this.navBarIndex = k
+          this.$refs.nav_bar.curIndex = this.navBarIndex;
+          console.log(k)
+          break;
+        }
+      }
+    },
+    // 点击navBar使scroll滚动到指定位置
+    navBarClick(index) {
+      let targerEl = Array.from(document.getElementsByClassName('scroll_postion'));
+      this.$refs.scroll_component.scrollToElement(targerEl[index],500)
+    },
+    addToCart() {
+      // 获取购物车列表展示的数据
+      const obj = {
+        image: this.topImages[0],
+        title: this.goods.title,
+        desc: this.goods.desc,
+        price: this.goods.lowNowPrice,
+        cont: 1,
+        checkout: false,
+        id: this.detailsId
+      };
+      // 将数据传入到购物车页面
+      this.$store.dispatch({
+        type: 'addCartProductInfo',
+        obj
+      })
     },
   },
 }
@@ -125,14 +179,16 @@ export default {
 <style scoped lang="scss">
 .productDetails {
   position: relative;
+  height: 100%;
+  width: 100%;
 }
 // 必须给scroll设定固定高度
 .scroll {
-  height: 100vh;
+  height: calc(100vh - 88px);
   overflow: hidden;
   position: absolute;
   top: 44px;
-  bottom: 44px;
+  // bottom: 44px;
   left: 0;
   right: 0;
   z-index: 9;

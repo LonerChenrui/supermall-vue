@@ -8,7 +8,14 @@
       </template>
       <template v-slot:nav-content>
         <div class="nav_content_title">
-          <span v-for="(item, index) in navbarTitle" :key="index">{{item}}</span>
+          <span 
+            v-for="(item, index) in navbarTitle" 
+            :key="index"
+            :class="{active: curIndex === index}"
+            @click="activeClick(index)"
+          >
+            {{item}} 
+          </span>
         </div>
       </template>
     </nav-bar>
@@ -21,7 +28,8 @@ export default {
   name: "productDetailsNavBar",
   data() {
     return {
-      navbarTitle: ["商品", "参数", "评论", "推荐"]
+      navbarTitle: ["商品", "参数", "评论", "推荐"],
+      curIndex: 0
     }
   },
   components:{ 
@@ -31,6 +39,10 @@ export default {
   methods: {
     goBack() {
       this.$router.back();
+    },
+    activeClick(index) {
+      this.curIndex = index;
+      this.$emit('navBarClick',index);
     }
   },
 }
@@ -50,6 +62,9 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
+}
+.active {
+  color: red
 }
 
 </style>

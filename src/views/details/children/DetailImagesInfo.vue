@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     imgLoad() {
+      // this.$emit("detailsImgInfo");
       if (++this.count === this.imagesLength) {
         this.$emit("detailsImgInfo");
       }
