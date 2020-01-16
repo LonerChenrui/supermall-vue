@@ -1,9 +1,9 @@
-import store from ".";
-
 export default {
+  // 相同商品数量叠加
   addProductCont(state,result) {
     result.cont++
   },
+  // 添加新商品
   addProductPush(state,{payLoad}) {
     state.cartProduct.push(payLoad.obj)
   },
@@ -26,5 +26,14 @@ export default {
       }
     })
     state.isCheckout = flag;
+  },
+  // 提交订单
+  placeOrder(state) {
+    for (let [index,value] of state.cartProduct.entries()) {
+      if(value.checkout == true) {
+        state.cartProduct.splice(index,1);
+      }
+    }
+    console.log(state.cartProduct)
   }
 }

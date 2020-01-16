@@ -5,14 +5,15 @@ import qs from 'qs';
 
 Vue.use(Toast)
 
-const url = "http://106.54.54.237:8000/api/w1" || "http://123.207.32.32:8000/api/w2";
+const url = "http://106.54.54.237:8000/api/hy";
+const url2 = "http://123.207.32.32:8000/api/hy";
 
 // 封装axios并导出
 export function request(config) {
 
   // 创建axios实例
   const instance = axios.create({
-    baseURL: url
+    baseURL: url || url2
   })
 
   // 请求拦截器
@@ -34,13 +35,11 @@ export function request(config) {
   // 响应拦截器
   instance.interceptors.response.use(
     (res) => {
-      setTimeout(() => {
-        Toast.clear();
-      }, 800);
+      Toast.clear();
       return res.data
     },
     (error) => {
-
+      Toast.clear();
       return Promise.reject(error); 
     },
   );

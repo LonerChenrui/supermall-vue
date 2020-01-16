@@ -30,6 +30,7 @@
 
 <script>
 import { mapGetters,mapActions, mapMutations } from 'vuex'
+import { Dialog,Toast } from 'vant'
 export default {
   name: "",
   data() {
@@ -41,7 +42,22 @@ export default {
   props:{ },
   methods: {
     submi() {
-      
+
+      if(this.cartOrderNum.length !== 0) {
+        Dialog.confirm({
+          title: '温馨提示',
+          message: '您确定需要提交订单？'
+        }).then(() => {
+          console.log("confirm")
+          // on confirm
+          this.$store.commit('placeOrder');
+        }).catch(() => {
+          // on cancel
+        });
+      }else {
+        Toast.fail('您还没添加商品哦');
+      }
+     
     },
     checkboxStatus() {
       this.$store.commit({

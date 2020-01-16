@@ -12,7 +12,6 @@ export default {
   },
   // 购物车合计价格
   cartTotalPrice: (state,getters) => {
-    console.log(getters.cartOrderNum.length)
     if(getters.cartProductLength > 0) {
       let result = getters.cartOrderNum.map((item,index)=>{
         return  item.price * item.cont;
@@ -24,10 +23,6 @@ export default {
       return result;
     }else {
       return 0.00
-    }
-
-
-
-      
+    } 
   }
 }

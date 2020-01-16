@@ -8,7 +8,7 @@
       @click="details(item.iid)"
     >
       <div>
-        <img :src="showTypeImg(index)" alt="" @load="refresh()">
+        <img v-lazy="showTypeImg(index)" alt="" @load="refresh()">
       </div>
       <p class="title">{{item.title}}</p>
       <div class="googsListItem_bottom">

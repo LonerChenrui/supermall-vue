@@ -33,7 +33,8 @@ import { getProductDetail,Goods,Shop,GoodsParams,getRecommend } from '@/network/
 import { debounce } from '@/common/utils'
 import { imgLoadMixin,backTopMixin } from '@/common/mixin'
 
-import { mapActions } from 'vuex'
+import { mapState,mapActions } from 'vuex'
+import { Toast } from 'vant'
 export default {
   name: "productDetails",
   data() {
@@ -81,6 +82,9 @@ export default {
   destroyed() {
     // 取消details事件总线
     this.$bus.$off('goodsLoadimg',this.imgMonitor)
+  },
+  computed: {
+    ...mapState(['cartProduct'])
   },
   methods: {
     // 发送网络请求
@@ -171,6 +175,24 @@ export default {
       this.$store.dispatch({
         type: 'addCartProductInfo',
         obj
+      }).then(res => {
+        for(let [index,value] of this.cartProduct.entries()) {
+          if(value.cont > 1) {
+            const toast = Toast.success({
+              duration: 2000, // 持续展示 toast
+              forbidClick: true,
+              message: '当前商品数量' + value.cont
+            });
+
+          }else {
+            const toast1 = Toast.success({
+              duration: 2000, // 持续展示 toast
+              forbidClick: true,
+              message: res
+            });
+          }
+        }
+       
       })
     },
   },
