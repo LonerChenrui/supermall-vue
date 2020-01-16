@@ -5,8 +5,8 @@ import qs from 'qs';
 
 Vue.use(Toast)
 
-const url = "http://106.54.54.237:8000/api/hy";
-const url2 = "http://123.207.32.32:8000/api/hy";
+
+const url2 = "127.0.0.1";
 
 // 封装axios并导出
 export function request(config) {
