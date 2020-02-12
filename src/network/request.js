@@ -5,7 +5,7 @@ import qs from 'qs';
 
 Vue.use(Toast)
 
-// 调试
+
 
 // 封装axios并导出
 export function request(config) {
