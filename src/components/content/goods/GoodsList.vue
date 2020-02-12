@@ -97,12 +97,13 @@ export default {
     .googsListItem_bottom {
       display: flex;
       align-items: center;
+      justify-content: center;
       .price {
         color: red;
       }
       .cfavImg {
         width: 40px;
-        height: 40px;
+        height: 20px;
         padding: 0 10px;
       }
     }

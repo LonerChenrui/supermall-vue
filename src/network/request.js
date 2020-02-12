@@ -6,7 +6,6 @@ import qs from 'qs';
 Vue.use(Toast)
 
 
-const url2 = "127.0.0.1";
 
 // 封装axios并导出
 export function request(config) {

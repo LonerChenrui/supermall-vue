@@ -1,3 +1,5 @@
+import store from ".";
+
 export default {
   // 相同商品数量叠加
   addProductCont(state,result) {
@@ -9,8 +11,8 @@ export default {
   },
   // 全选
   checkboxStatus(state,payload) {
-    if(store.getters.cartProductLength > 0) {
-      let falg = !payload.checkout;
+    if(state.cartProduct.length > 0) {
+      let falg = !payload;
       state.cartProduct = state.cartProduct.map((item) => {
         item.checkout = falg;
         return item

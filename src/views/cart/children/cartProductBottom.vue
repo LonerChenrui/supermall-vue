@@ -5,7 +5,7 @@
         <van-checkbox 
           v-model="$store.state.isCheckout" 
           checked-color="#07c160" 
-          @click='checkboxStatus'
+          @click='checkboxStatus($store.state.isCheckout)'
         >
           全选
         </van-checkbox>
@@ -59,12 +59,13 @@ export default {
       }
      
     },
-    checkboxStatus() {
-      this.$store.commit({
-        type: 'checkboxStatus',
-        checkout: this.$store.state.isCheckout
-      })
-    }
+    // checkboxStatus() {
+    //   this.$store.commit({
+    //     type: 'checkboxStatus',
+    //     checkout: this.$store.state.isCheckout
+    //   })
+    // },
+    ...mapMutations(['checkboxStatus'])
   },
   computed: {
     ...mapGetters(['cartTotalPrice','cartOrderNum'])
