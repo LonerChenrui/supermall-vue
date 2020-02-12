@@ -48,23 +48,17 @@ export default {
           title: '温馨提示',
           message: '您确定需要提交订单？'
         }).then(() => {
-          console.log("confirm")
-          // on confirm
+          
+          
           this.$store.commit('placeOrder');
         }).catch(() => {
-          // on cancel
+         
         });
       }else {
         Toast.fail('您还没添加商品哦');
       }
      
     },
-    // checkboxStatus() {
-    //   this.$store.commit({
-    //     type: 'checkboxStatus',
-    //     checkout: this.$store.state.isCheckout
-    //   })
-    // },
     ...mapMutations(['checkboxStatus'])
   },
   computed: {

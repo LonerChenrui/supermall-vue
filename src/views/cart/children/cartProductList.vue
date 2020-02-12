@@ -25,7 +25,7 @@
 </template>
 
 <script>
-
+import {mapMutations} from 'vuex'
 export default {
   name: "cartProductList",
   data() {
@@ -49,11 +49,19 @@ export default {
       this.$store.commit({
         type: 'singleStatus'
       })
-    }
+    },
+    ...mapMutations(["setCartList"])
   },
   computed: {
     
   },
+  created() {
+    // 取出购物车列表数据
+    const list = JSON.parse(localStorage.getItem('setCartList')) || [];
+    if(list) {
+      this.setCartList(list);
+    }
+  }
 }
 </script>
 <style scoped lang="scss">
