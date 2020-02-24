@@ -9,6 +9,8 @@ const Category = () => import('../views/category/category.vue')
 const Cart = () => import('../views/cart/cart.vue')
 const Profile = () => import('../views/profile/profile.vue')
 const ProductDetails = () => import('../views/details/ProductDetails.vue')
+const Login = () => import('../views/login/Login.vue')
+const Register = () => import('../views/register/Register.vue')
 
 const routes = [
   {
@@ -40,6 +42,16 @@ const routes = [
     name: 'details',
     component: ProductDetails
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
+  }
 ]
 
 const router = new VueRouter({
