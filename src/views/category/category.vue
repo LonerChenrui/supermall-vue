@@ -9,13 +9,21 @@
 
     <!-- 左侧分类title -->
     <scroll class="scroll_left">
-      <category-left-title :categoryList="categoryList"/>
+      <category-left-title 
+        :categoryList="categoryList" 
+        @categoryLeftTitle="categoryLeftTitle"
+        ref="leftTitle"
+      />
     </scroll>
     
     <!-- 右侧分类内容 -->
     <scroll class="scroll_right">
       <subcategory :getSubcategoryData="getSubcategoryData"/>
-      <tab-control :tabControlTitles="tabControlTitles" />
+      <tab-control 
+        :tabControlTitles="tabControlTitles" 
+        @goodsListtype="goodsListtype"
+        ref="tabControl"
+      />
       <goods-list :goodList="getCategoryDetailData"/>
     </scroll>
 
@@ -57,8 +65,10 @@ export default {
     this.getCatetory();
   },
   methods: {
+    // ##初始化数据
     getCatetory() {
-      getCatetory().then(res => {
+      // 1.左侧分类
+      getCatetory().then(res => { 
         const result = res.data.category.list;
         this.categoryList = result;
         this.$nextTick(()=>{
@@ -67,15 +77,32 @@ export default {
         })
       })
     },
+    // 右侧上面部分
     getSubcategory(key,index) {
       getSubcategory(key).then(res => {
         this.getSubcategoryData = res.data.list;
       })
     },
+     // 右侧下面部分
     getCategoryDetail(key,type) {
       getCategoryDetail(key,type).then(res => {
         this.getCategoryDetailData = res
       })
+    },
+
+    // ##切换分类展示对应数据
+    categoryLeftTitle({item,index}) {
+      this.$refs.tabControl.curIndex = 0;
+      this.getSubcategory(item.maitKey,index);
+      this.getCategoryDetail(item.miniWallkey,'pop');
+
+    },
+
+    // ##流行、新款、精选
+    goodsListtype(index) {
+      const type = ["pop", "new", "sell"];
+      const curIndex = this.$refs.leftTitle.curIndex;
+      this.getCategoryDetail(this.categoryList[curIndex].miniWallkey,type[index]);
     }
   }
 }

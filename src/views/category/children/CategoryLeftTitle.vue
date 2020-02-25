@@ -1,8 +1,12 @@
 <template>
   <div class="categoryLeftTitle">
     <div v-for="(item,index) in categoryList" :key="(item.title)">
-      <div class="title-itme" :class="curIndex === index ? 'active': '' ">
-        {{item.title}}
+      <div 
+        class="title-itme" 
+        :class="{active: curIndex === index}"
+        @click="categoryLeftType(item,index)"
+      >
+          {{item.title}}
       </div>
     </div>
   </div>
@@ -25,6 +29,16 @@ export default {
       }
     }
   },
+  methods: {
+    categoryLeftType(item,index) {
+      this.curIndex = index;
+      const obj = {
+        item,
+        index
+      }
+      this.$emit('categoryLeftTitle',obj)
+    }
+  }
 }
 </script>
 <style scoped lang="scss">
@@ -43,5 +57,6 @@ export default {
   border-left: 3px solid #ff8198;
   box-sizing: border-box;
   background: #fff;
+  color:  #ff8198;
 }
 </style>
